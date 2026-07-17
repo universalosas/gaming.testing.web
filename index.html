@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OSARO // Player Dashboard</title>
+<meta name="description" content="Personal gaming dashboard for OSARO — library, achievements, setup and highlights.">
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===================== BOOT SEQUENCE ===================== -->
+<div class="boot" id="boot" aria-hidden="true">
+  <div class="boot__grid"></div>
+  <svg class="boot__ring" viewBox="0 0 200 200">
+    <circle cx="100" cy="100" r="86" class="boot__ring-track"/>
+    <circle cx="100" cy="100" r="86" class="boot__ring-progress"/>
+  </svg>
+  <div class="boot__mark">
+    <span class="boot__bracket">[</span>OSARO<span class="boot__bracket">]</span>
+  </div>
+  <div class="boot__status">
+    <span class="boot__line">INITIALIZING DASHBOARD</span>
+    <span class="boot__pct">00%</span>
+  </div>
+</div>
+
+<!-- Ambient cursor glow -->
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav" id="siteNav">
+  <a href="#top" class="nav__brand">
+    <span class="nav__brand-icon"><i class="bi bi-controller"></i></span>
+    <span class="nav__brand-text">OSARO<span class="nav__brand-dot">.</span>HUB</span>
+  </a>
+
+  <nav class="nav__links" id="navLinks">
+    <a href="#library" data-nav>Library</a>
+    <a href="#achievements" data-nav>Achievements</a>
+    <a href="#setup" data-nav>Setup</a>
+    <a href="#highlights" data-nav>Highlights</a>
+    <a href="#connect" data-nav>Connect</a>
+  </nav>
+
+  <button class="nav__toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<!-- ===================== HUD STATUS TILE (persistent) ===================== -->
+<div class="hud-tile" id="hudTile">
+  <span class="hud-tile__dot"></span>
+  <div class="hud-tile__text">
+    <span class="hud-tile__status">ONLINE</span>
+    <span class="hud-tile__detail">Now Playing — <em id="hudGame">Shattered Meridian</em></span>
+  </div>
+  <span class="hud-tile__arrow"><i class="bi bi-chevron-up"></i></span>
+</div>
+
+<main id="top">
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero" id="hero">
+    <div class="hero__media">
+      <video class="hero__video" autoplay muted loop playsinline
+        poster="https://assets.mixkit.co/videos/51602/51602-thumb-360-0.jpg">
+        <source src="https://assets.mixkit.co/videos/51602/51602-360.mp4" type="video/mp4">
+      </video>
+      <div class="hero__scan"></div>
+      <div class="hero__gradient"></div>
+    </div>
+
+    <div class="hero__content">
+      <p class="hero__eyebrow"><i class="bi bi-broadcast"></i> Player Dashboard — Season 04</p>
+      <h1 class="hero__title">
+        <span class="glitch" data-text="OSARO">OSARO</span>
+      </h1>
+      <p class="hero__tagline">Full-stack developer by day, speedrunning the backlog by night. Welcome to my dashboard.</p>
+
+      <div class="hero__actions">
+        <a href="#library" class="btn btn--volt"><i class="bi bi-joystick"></i> View Library</a>
+        <a href="#achievements" class="btn btn--ghost"><i class="bi bi-trophy"></i> Achievements</a>
+      </div>
+    </div>
+
+    <div class="hero__now-playing" id="nowPlaying">
+      <div class="now-playing__art" aria-hidden="true">
+        <i class="bi bi-controller"></i>
+      </div>
+      <div class="now-playing__info">
+        <span class="now-playing__label">Currently Playing</span>
+        <span class="now-playing__title">Shattered Meridian</span>
+        <div class="now-playing__bar"><span style="width:64%"></span></div>
+        <span class="now-playing__meta">64% · Chapter 7 · 22h 40m logged</span>
+      </div>
+    </div>
+
+    <div class="hero__scroll-cue">
+      <span>Scroll</span>
+      <i class="bi bi-chevron-down"></i>
+    </div>
+  </section>
+
+  <!-- ===================== STATS TICKER ===================== -->
+  <section class="ticker" aria-label="Player stats">
+    <div class="ticker__track" id="tickerTrack">
+      <!-- duplicated via JS for seamless loop -->
+    </div>
+  </section>
+
+  <!-- ===================== GAME LIBRARY ===================== -->
+  <section class="section library" id="library">
+    <div class="section__head">
+      <p class="section__eyebrow">01 — Library</p>
+      <h2 class="section__title">Currently in Rotation</h2>
+      <div class="section__controls">
+        <button class="scroll-btn" data-dir="-1" aria-label="Scroll library left"><i class="bi bi-chevron-left"></i></button>
+        <button class="scroll-btn" data-dir="1" aria-label="Scroll library right"><i class="bi bi-chevron-right"></i></button>
+      </div>
+    </div>
+
+    <div class="library__row" id="libraryRow">
+      <!-- game cards injected by JS -->
+    </div>
+  </section>
+
+  <!-- ===================== ACHIEVEMENTS ===================== -->
+  <section class="section achievements" id="achievements">
+    <div class="section__head">
+      <p class="section__eyebrow">02 — Trophy Case</p>
+      <h2 class="section__title">Achievements Unlocked</h2>
+    </div>
+
+    <div class="achv-summary" id="achvSummary">
+      <!-- injected -->
+    </div>
+
+    <div class="achv-grid" id="achvGrid">
+      <!-- injected -->
+    </div>
+  </section>
+
+  <!-- ===================== SETUP / GEAR ===================== -->
+  <section class="section setup" id="setup">
+    <div class="section__head">
+      <p class="section__eyebrow">03 — Setup</p>
+      <h2 class="section__title">Battlestation</h2>
+    </div>
+
+    <div class="setup__grid" id="setupGrid">
+      <!-- injected -->
+    </div>
+  </section>
+
+  <!-- ===================== HIGHLIGHTS ===================== -->
+  <section class="section highlights" id="highlights">
+    <div class="section__head">
+      <p class="section__eyebrow">04 — Highlights</p>
+      <h2 class="section__title">Clutch Clips</h2>
+    </div>
+
+    <div class="clip-grid" id="clipGrid">
+      <!-- injected -->
+    </div>
+  </section>
+
+  <!-- ===================== CONNECT / CONTACT ===================== -->
+  <section class="section connect" id="connect">
+    <div class="connect__panel">
+      <div class="connect__left">
+        <p class="section__eyebrow">05 — Connect</p>
+        <h2 class="section__title">Squad Up</h2>
+        <p class="connect__copy">Building something, shipping a game jam entry, or just want to talk about the backlog? Drop a message on the terminal.</p>
+
+        <ul class="connect__socials">
+          <li><a href="#" aria-label="Discord"><i class="bi bi-discord"></i></a></li>
+          <li><a href="#" aria-label="Twitch"><i class="bi bi-twitch"></i></a></li>
+          <li><a href="#" aria-label="YouTube"><i class="bi bi-youtube"></i></a></li>
+          <li><a href="#" aria-label="X / Twitter"><i class="bi bi-twitter-x"></i></a></li>
+          <li><a href="#" aria-label="GitHub"><i class="bi bi-github"></i></a></li>
+        </ul>
+      </div>
+
+      <form class="connect__form" id="connectForm">
+        <div class="connect__form-head">
+          <span class="connect__dot"></span> NEW MESSAGE — CH.4
+        </div>
+        <label class="field">
+          <span>Gamertag / Name</span>
+          <input type="text" name="name" placeholder="Enter your tag" required>
+        </label>
+        <label class="field">
+          <span>Email</span>
+          <input type="email" name="email" placeholder="you@domain.com" required>
+        </label>
+        <label class="field">
+          <span>Message</span>
+          <textarea name="message" rows="4" placeholder="Say something..." required></textarea>
+        </label>
+        <button type="submit" class="btn btn--volt btn--block"><i class="bi bi-send"></i> Send Transmission</button>
+        <p class="connect__note" id="connectNote" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer__row">
+    <span class="footer__brand"><i class="bi bi-controller"></i> OSARO.HUB</span>
+    <p class="footer__copy">&copy; <span id="year"></span> Osaro. Built frontend-only, no continues wasted.</p>
+    <button class="footer__top" id="toTop" aria-label="Back to top"><i class="bi bi-arrow-up-short"></i></button>
+  </div>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>
